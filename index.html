@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="RoboSkill-Evolve: Validator-guided dual-level self-evolution for robot manipulation on RoboDojo."
+    />
+    <title>RoboSkill-Evolve | RoboDojo Project</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="RoboSkill-Evolve home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>RoboSkill·Evolve</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#cases">Cases</a>
+        <a href="#status">Status</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/posters/stack-bowls.png" src="assets/videos/stack-bowls.mp4"></video>
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/posters/fold-clothes.png" src="assets/videos/fold-clothes.mp4"></video>
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/posters/insert-tubes.png" src="assets/videos/insert-tubes.mp4"></video>
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/posters/classify-objects.png" src="assets/videos/classify-objects.mp4"></video>
+        </div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <p class="hero-kicker">RoboDojo · π0.5 · Structured Skill Memory</p>
+          <h1 id="hero-title">RoboSkill-Evolve</h1>
+          <p class="hero-subtitle">
+            Validator-guided dual-level self-evolution for reusable robot manipulation skills.
+          </p>
+          <p class="hero-author">Yang Chenjie · RoboDojo Project · 2026</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#results">View verified results</a>
+            <a class="button button-secondary" href="#method">Explore the method</a>
+          </div>
+        </div>
+        <div class="hero-metrics" aria-label="Project scale">
+          <div><strong>34</strong><span>Train tasks</span></div>
+          <div><strong>8</strong><span>Open / OOD</span></div>
+          <div><strong>25</strong><span>Skill entries</span></div>
+          <div><strong>800</strong><span>Evidence segments</span></div>
+        </div>
+      </section>
+
+      <section class="section section-intro" id="overview">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Overview</p>
+          <h2>Separate what the robot knows from what the policy can execute.</h2>
+          <p>
+            RoboSkill-Evolve extends π0.5 on RoboDojo with an explicit, versioned Skill Memory.
+            Frequent updates refine retrieval, task graphs, subgoals, and recovery. Expensive model
+            updates are reserved for repeated execution gaps that pass provenance, replay, and
+            checkpoint gates.
+          </p>
+        </div>
+        <div class="principles">
+          <article>
+            <span class="principle-index">01</span>
+            <h3>Explicit skill memory</h3>
+            <p>Skills carry specifications, evidence, embeddings, experience, and lineage instead of a prompt alone.</p>
+          </article>
+          <article>
+            <span class="principle-index">02</span>
+            <h3>Validator-first routing</h3>
+            <p>Failures are routed to Skill, Model, or No-update before any mutable state is changed.</p>
+          </article>
+          <article>
+            <span class="principle-index">03</span>
+            <h3>Promotion over overwrite</h3>
+            <p>Candidates face target and protected-task gates; regressions retain or restore the champion.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-videos" id="demo">
+        <div class="section-heading row-heading">
+          <div>
+            <p class="eyebrow">Rollout gallery</p>
+            <h2>Behavior first, metrics second.</h2>
+          </div>
+          <div class="segmented" role="group" aria-label="Filter rollout videos">
+            <button class="filter-button is-active" type="button" data-filter="all">All</button>
+            <button class="filter-button" type="button" data-filter="generalization">Generalization</button>
+            <button class="filter-button" type="button" data-filter="precision">Precision</button>
+            <button class="filter-button" type="button" data-filter="long-horizon">Long-Horizon</button>
+            <button class="filter-button" type="button" data-filter="memory">Memory</button>
+          </div>
+        </div>
+
+        <div class="video-grid" id="rollout-grid">
+          <article class="video-card" data-category="generalization">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/stack-bowls.png" src="assets/videos/stack-bowls.mp4"></video>
+              <span class="status status-success">Success</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Generalization</span><span>Source A / π0.5 step14077</span></div>
+              <h3>Stack bowls</h3>
+              <p>Seed 0, episode 0 success. This source run records 21/25; the separate selected-task result below is 23/25.</p>
+            </div>
+          </article>
+
+          <article class="video-card" data-category="generalization">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/fold-clothes.png" src="assets/videos/fold-clothes.mp4"></video>
+              <span class="status status-success">Success</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Generalization</span><span>Source A / π0.5 step14077</span></div>
+              <h3>Fold clothes</h3>
+              <p>A longer action sequence with 11/25 verified successes under the selected protocol.</p>
+            </div>
+          </article>
+
+          <article class="video-card" data-category="precision">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/insert-tubes.png" src="assets/videos/insert-tubes.mp4"></video>
+              <span class="status status-success">Success</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Precision</span><span>Sources A+B / Hi_MEM_EVO</span></div>
+              <h3>Insert tubes</h3>
+              <p>Seed 1, episode 1 success from a 1/10 run; the same SHA-256 evidence is indexed by A and B.</p>
+            </div>
+          </article>
+
+          <article class="video-card" data-category="long-horizon">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/classify-objects.png" src="assets/videos/classify-objects.mp4"></video>
+              <span class="status status-success">Success</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Long-Horizon</span><span>Source A / π0.5 step9000</span></div>
+              <h3>Classify objects</h3>
+              <p>Episode 5 success from an 8/50 step9000 run. It is qualitative evidence, not the step14077 result.</p>
+            </div>
+          </article>
+
+          <article class="video-card" data-category="memory">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/fill-pen-holder.png" src="assets/videos/fill-pen-holder.mp4"></video>
+              <span class="status status-success">Success</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Memory pilot</span><span>Source A / Hi_MEM</span></div>
+              <h3>Fill pen holder</h3>
+              <p>A successful Memory rollout from a 20-episode run with 2 successes.</p>
+            </div>
+          </article>
+
+          <article class="video-card" data-category="memory">
+            <div class="video-frame">
+              <video controls muted loop playsinline preload="metadata" poster="assets/posters/memory-failure.png" src="assets/videos/memory-failure.mp4"></video>
+              <span class="status status-failure">Failure</span>
+            </div>
+            <div class="video-copy">
+              <div><span>Memory</span><span>Evaluation tree / π0.5 step14077</span></div>
+              <h3>Press by number</h3>
+              <p>A representative failure from the selected finetune set, where task success remains 0/50.</p>
+            </div>
+          </article>
+        </div>
+        <p class="source-note">
+          Source A: RoboDojo showcase index. Source B: Memory VIDEO_INDEX. Source C: RoboSkill video manifest,
+          used in the paired comparison below. All gallery videos use the head camera.
+        </p>
+      </section>
+
+      <section class="section section-method" id="method">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Method</p>
+          <h2>A dual-level loop with one authority: the native Validator.</h2>
+          <p>
+            The runtime compiles a retrieved Skill into a short subgoal for π0.5. The native RoboDojo
+            Validator remains the source of success, score, and progress. Its evidence routes each
+            failure before a candidate can be created.
+          </p>
+        </div>
+
+        <div class="runtime-flow" aria-label="Runtime data flow">
+          <div class="flow-node"><span>01</span><strong>Demos & rollouts</strong><small>state · action · RGB · score</small></div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="flow-node"><span>02</span><strong>Skill Library</strong><small>spec · evidence · experience</small></div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="flow-node"><span>03</span><strong>Runtime compiler</strong><small>retrieve · schedule · subgoal</small></div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="flow-node"><span>04</span><strong>π0.5 rollout</strong><small>3 RGB + 14-D → 14-D action</small></div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="flow-node validator-node"><span>05</span><strong>Validator</strong><small>success · score · progress</small></div>
+        </div>
+
+        <div class="evolution-branches">
+          <article class="branch branch-skill">
+            <p class="branch-label">High frequency</p>
+            <h3>Skill-level evolution</h3>
+            <p>Update conditions, subgoals, retrieval context, failure memory, and recovery without changing policy weights.</p>
+            <ol>
+              <li>Cluster homogeneous train failures</li>
+              <li>Create a versioned candidate</li>
+              <li>Run target + protected A/B</li>
+              <li>Promote or roll back</li>
+            </ol>
+          </article>
+          <article class="branch branch-model">
+            <p class="branch-label">Low frequency</p>
+            <h3>Model-level evolution</h3>
+            <p>Only repeated execution-capability gaps can enter acquisition; system, Validator, and Open/OOD failures are rejected.</p>
+            <ol>
+              <li>Accept provenance-safe deltas</li>
+              <li>Build 40 / 40 / 20 replay</li>
+              <li>Train a candidate LoRA</li>
+              <li>Gate across train + Open tasks</li>
+            </ol>
+          </article>
+        </div>
+
+        <figure class="wide-figure dark-figure">
+          <img src="assets/images/skill-framework.png" alt="RoboSkill-Evolve dual-level self-evolution framework" />
+          <figcaption>Compact implementation view: Skill updates and model updates share root-cause routing, promotion, and rollback.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section-library" id="library">
+        <div class="section-heading row-heading">
+          <div>
+            <p class="eyebrow">Structured memory</p>
+            <h2>The Library is executable, evidenced, and versioned.</h2>
+          </div>
+          <p class="heading-note">Open/OOD records written to mutable memory: <strong>0</strong></p>
+        </div>
+
+        <div class="library-layout">
+          <div class="skill-schema">
+            <div class="schema-header">
+              <span>Skill entry</span>
+              <strong>stack_objects · v1 champion</strong>
+            </div>
+            <dl>
+              <div><dt>Spec</dt><dd>preconditions · subgoals · termination · recovery</dd></div>
+              <div><dt>Evidence</dt><dd>21 segments across stack_blocks and stack_bowls</dd></div>
+              <div><dt>Embeddings</dt><dd>text · visual · task-context · trajectory</dd></div>
+              <div><dt>Experience</dt><dd>context statistics · failures · accepted rollouts</dd></div>
+              <div><dt>Version</dt><dd>parent · candidate · promotion evidence · rollback target</dd></div>
+            </dl>
+          </div>
+          <div class="library-stats">
+            <div><strong>25</strong><span>Executable entries</span></div>
+            <div><strong>34</strong><span>Task graphs</span></div>
+            <div><strong>66</strong><span>Execution nodes</span></div>
+            <div><strong>800</strong><span>Evidence segments</span></div>
+            <div><strong>2,403</strong><span>Unique SHA artifacts</span></div>
+            <div><strong>4,000</strong><span>Verified references</span></div>
+          </div>
+        </div>
+
+        <div class="skill-examples" aria-label="Reusable skill examples">
+          <article><span>Generalization</span><h3>stack_objects</h3><p>Shared by block and bowl stacking with task-specific evidence.</p></article>
+          <article><span>Long-Horizon</span><h3>sort_objects</h3><p>Combines object selection, destination matching, and progress memory.</p></article>
+          <article><span>Precision / Memory</span><h3>press_control</h3><p>Stores contact failures and recovery rules for toast and number controls.</p></article>
+          <article><span>Memory</span><h3>remember_observation</h3><p>Retains task-relevant scene order for later interaction steps.</p></article>
+        </div>
+      </section>
+
+      <section class="section section-results" id="results">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Verified results</p>
+          <h2>Strong task-specific learning, uneven category coverage.</h2>
+          <p>
+            Step 14077 is the current main finetune checkpoint. The selected ten-task evaluation shows
+            clear strength in stacking and folding, while Precision and Memory remain the dominant gaps.
+          </p>
+        </div>
+
+        <div class="result-block">
+          <div class="result-title">
+            <div><span class="result-index">A</span><h3>Finetune checkpoint 14077</h3></div>
+            <p>Native task success rate · N=25 or 50</p>
+          </div>
+          <div class="vertical-chart" aria-label="Finetune task success rates">
+            <div class="vbar" style="--value: 92"><span>92%</span><i></i><small>stack<br />bowls</small></div>
+            <div class="vbar" style="--value: 44"><span>44%</span><i></i><small>fold<br />clothes</small></div>
+            <div class="vbar" style="--value: 24"><span>24%</span><i></i><small>stack<br />blocks</small></div>
+            <div class="vbar" style="--value: 10"><span>10%</span><i></i><small>classify<br />objects</small></div>
+            <div class="vbar" style="--value: 8"><span>8%</span><i></i><small>make<br />toast</small></div>
+            <div class="vbar" style="--value: 2"><span>2%</span><i></i><small>plug in<br />charger</small></div>
+            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>organize<br />table</small></div>
+            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>deposit<br />coin</small></div>
+            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>press by<br />number</small></div>
+            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>swap<br />blocks</small></div>
+          </div>
+        </div>
+
+        <div class="result-columns">
+          <div class="result-block compact-result">
+            <div class="result-title">
+              <div><span class="result-index">B</span><h3>Category macro</h3></div>
+              <p>Selected tasks · equal task weight</p>
+            </div>
+            <div class="horizontal-chart">
+              <div><span>Generalization</span><b><i style="--value: 42"></i></b><strong>42%</strong></div>
+              <div><span>Long-Horizon</span><b><i style="--value: 5"></i></b><strong>5%</strong></div>
+              <div><span>Precision</span><b><i style="--value: 1"></i></b><strong>1%</strong></div>
+              <div><span>Memory</span><b><i style="--value: 0"></i></b><strong>0%</strong></div>
+            </div>
+          </div>
+
+          <div class="result-block compact-result">
+            <div class="result-title">
+              <div><span class="result-index">C</span><h3>Matched Memory pilot</h3></div>
+              <p>Four task macro · aligned task, seed, and N</p>
+            </div>
+            <table class="result-table">
+              <thead><tr><th>Method</th><th>SR</th><th>Score</th></tr></thead>
+              <tbody>
+                <tr><td>Base π0.5</td><td>20.00</td><td>30.31</td></tr>
+                <tr><td>Hi_MEM</td><td>16.25</td><td>24.94</td></tr>
+                <tr class="positive-row"><td>Hi_MEM_EVO</td><td>23.75</td><td>35.69</td></tr>
+              </tbody>
+            </table>
+            <p class="result-caveat">Positive pilot signal; evidence is still too small for an official overall claim.</p>
+          </div>
+        </div>
+
+        <div class="gate-result">
+          <div>
+            <p class="eyebrow">Promotion gate outcome</p>
+            <h3>Current B3 Skill candidate: not promoted.</h3>
+            <p>
+              In the comparable seed-0 evaluation over 5 tasks × 5 episodes, frozen B0 reached 2/25
+              (8%) while B3 v1 and v2 reached 1/25 (4%). The correct system action is retention or rollback,
+              followed by better grounding and a larger paired evaluation.
+            </p>
+          </div>
+          <div class="gate-numbers" aria-label="Formal paired comparison">
+            <div><span>B0 champion</span><strong>8%</strong><small>2 / 25 · score 13.8</small></div>
+            <div class="gate-divider" aria-hidden="true">→</div>
+            <div class="rejected"><span>B3 candidate</span><strong>4%</strong><small>1 / 25 · score 9.8</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-cases" id="cases">
+        <div class="section-heading row-heading">
+          <div>
+          <p class="eyebrow">Qualitative comparison · Source C</p>
+            <h2>Success and failure from the same task protocol.</h2>
+          </div>
+          <div class="segmented" role="group" aria-label="Select comparison task">
+            <button class="case-button is-active" type="button" data-case="classify">Classify objects</button>
+            <button class="case-button" type="button" data-case="stack">Stack blocks</button>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <article class="comparison-item success-panel">
+            <div class="comparison-heading"><span>Successful rollout</span><strong id="success-episode">Episode 0</strong></div>
+            <video id="success-video" controls muted loop playsinline preload="metadata" poster="assets/posters/skill-classify-success.png" src="assets/videos/skill-classify-success.mp4"></video>
+            <p id="success-copy">B3 v2 · seed 0 · the correct objects reach their destinations.</p>
+          </article>
+          <article class="comparison-item failure-panel">
+            <div class="comparison-heading"><span>Failed rollout</span><strong id="failure-episode">Episode 1</strong></div>
+            <video id="failure-video" controls muted loop playsinline preload="metadata" poster="assets/posters/skill-classify-failure.png" src="assets/videos/skill-classify-failure.mp4"></video>
+            <p id="failure-copy">Same run and task; execution diverges before terminal completion.</p>
+          </article>
+        </div>
+
+        <div class="evidence-strip">
+          <figure>
+            <img src="assets/images/stack-bowls-three-cameras.jpg" alt="Head, left wrist, and right wrist views from one stack bowls success" />
+            <figcaption>One successful stack_bowls episode preserved across head, left wrist, and right wrist cameras.</figcaption>
+          </figure>
+          <div>
+            <p class="eyebrow">Evidence boundary</p>
+            <h3>No matching failure is substituted.</h3>
+            <p>
+              The current RoboSkill result tree contains a stack_bowls success but no failure video for that task.
+              The gallery keeps this gap visible rather than borrowing a failure from another task.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-evidence" id="evidence">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Evidence audit</p>
+          <h2>Coverage is reported separately from comparability.</h2>
+          <p>
+            The broader result tree contains exploratory, smoke, repeated, and camera-invalid runs. Only
+            camera-valid and protocol-aligned subsets are used for task-level or matched conclusions.
+          </p>
+        </div>
+        <div class="audit-metrics">
+          <div><strong>215</strong><span>Audited runs</span></div>
+          <div><strong>5,854</strong><span>Indexed episodes</span></div>
+          <div><strong>17,646</strong><span>Indexed videos</span></div>
+          <div><strong>108</strong><span>Camera-valid runs</span></div>
+          <div><strong>107</strong><span>Camera-invalid runs</span></div>
+          <div><strong>0</strong><span>Open contamination</span></div>
+        </div>
+        <p class="audit-note">
+          Coverage-only pooled rates are retained for engineering audit, not presented as an official benchmark overall.
+        </p>
+      </section>
+
+      <section class="section section-status" id="status">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Current status · August 2026</p>
+          <h2>The system loop is working; the research claim is still being tested.</h2>
+        </div>
+        <div class="status-list">
+          <article>
+            <span class="status-marker pending"></span>
+            <div><p>Official evaluation</p><h3>Submission requested</h3><span>Application submitted to the RoboDojo website; response pending.</span></div>
+          </article>
+          <article>
+            <span class="status-marker running"></span>
+            <div><p>Memory optimization</p><h3>Expanded evaluation in progress</h3><span>Framework and pilot experiments exist; the new 8×4090 task matrix is not yet complete.</span></div>
+          </article>
+          <article>
+            <span class="status-marker running"></span>
+            <div><p>Real robot</p><h3>Piper setup under validation</h3><span>Initial Piper-arm experiments are complete; scene layouts, calibration, and protocols are still being refined.</span></div>
+          </article>
+          <article>
+            <span class="status-marker planned"></span>
+            <div><p>Release</p><h3>Checkpoint, project page, and reproducibility package</h3><span>Planned delivery includes the verified checkpoint, configurations, evidence indices, and a clean project repository.</span></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>RoboSkill-Evolve</strong>
+        <p>Validator-guided Skill and Model evolution on RoboDojo.</p>
+      </div>
+      <div class="footer-links">
+        <span>Explore</span>
+        <a href="#gallery">Demos</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
