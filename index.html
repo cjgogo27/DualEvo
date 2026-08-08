@@ -226,9 +226,9 @@
           </article>
         </div>
 
-        <figure class="wide-figure dark-figure">
-          <img src="assets/images/skill-framework.png" alt="RoboSkill-Evolve dual-level self-evolution framework" />
-          <figcaption>Compact implementation view: Skill updates and model updates share root-cause routing, promotion, and rollback.</figcaption>
+        <figure class="wide-figure">
+          <img src="assets/images/framework-main.png" alt="RoboSkill-Evolve offline initialization, online rollout, validation, and dual-level evolution framework" />
+          <figcaption>Skill updates and model updates share rollout logging, root-cause diagnosis, validation, promotion, and rollback.</figcaption>
         </figure>
       </section>
 
@@ -275,79 +275,25 @@
 
       <section class="section section-results" id="results">
         <div class="section-heading narrow">
-          <p class="eyebrow">Verified results</p>
-          <h2>Strong task-specific learning, uneven category coverage.</h2>
-          <p>
-            Step 14077 is the current main finetune checkpoint. The selected ten-task evaluation shows
-            clear strength in stacking and folding, while Precision and Memory remain the dominant gaps.
-          </p>
+          <p class="eyebrow">Matched evaluation</p>
+          <h2>Memory pilot.</h2>
+          <p>Four tasks evaluated with aligned task, seed, and episode budget.</p>
         </div>
 
-        <div class="result-block">
+        <div class="result-block compact-result memory-pilot-result">
           <div class="result-title">
-            <div><span class="result-index">A</span><h3>Finetune checkpoint 14077</h3></div>
-            <p>Native task success rate · N=25 or 50</p>
+            <div><span class="result-index">A</span><h3>Matched Memory pilot</h3></div>
+            <p>Four task macro · aligned task, seed, and N</p>
           </div>
-          <div class="vertical-chart" aria-label="Finetune task success rates">
-            <div class="vbar" style="--value: 92"><span>92%</span><i></i><small>stack<br />bowls</small></div>
-            <div class="vbar" style="--value: 44"><span>44%</span><i></i><small>fold<br />clothes</small></div>
-            <div class="vbar" style="--value: 24"><span>24%</span><i></i><small>stack<br />blocks</small></div>
-            <div class="vbar" style="--value: 10"><span>10%</span><i></i><small>classify<br />objects</small></div>
-            <div class="vbar" style="--value: 8"><span>8%</span><i></i><small>make<br />toast</small></div>
-            <div class="vbar" style="--value: 2"><span>2%</span><i></i><small>plug in<br />charger</small></div>
-            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>organize<br />table</small></div>
-            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>deposit<br />coin</small></div>
-            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>press by<br />number</small></div>
-            <div class="vbar" style="--value: 0"><span>0%</span><i></i><small>swap<br />blocks</small></div>
-          </div>
-        </div>
-
-        <div class="result-columns">
-          <div class="result-block compact-result">
-            <div class="result-title">
-              <div><span class="result-index">B</span><h3>Category macro</h3></div>
-              <p>Selected tasks · equal task weight</p>
-            </div>
-            <div class="horizontal-chart">
-              <div><span>Generalization</span><b><i style="--value: 42"></i></b><strong>42%</strong></div>
-              <div><span>Long-Horizon</span><b><i style="--value: 5"></i></b><strong>5%</strong></div>
-              <div><span>Precision</span><b><i style="--value: 1"></i></b><strong>1%</strong></div>
-              <div><span>Memory</span><b><i style="--value: 0"></i></b><strong>0%</strong></div>
-            </div>
-          </div>
-
-          <div class="result-block compact-result">
-            <div class="result-title">
-              <div><span class="result-index">C</span><h3>Matched Memory pilot</h3></div>
-              <p>Four task macro · aligned task, seed, and N</p>
-            </div>
-            <table class="result-table">
-              <thead><tr><th>Method</th><th>SR</th><th>Score</th></tr></thead>
-              <tbody>
-                <tr><td>Base π0.5</td><td>20.00</td><td>30.31</td></tr>
-                <tr><td>Hi_MEM</td><td>16.25</td><td>24.94</td></tr>
-                <tr class="positive-row"><td>Hi_MEM_EVO</td><td>23.75</td><td>35.69</td></tr>
-              </tbody>
-            </table>
-            <p class="result-caveat">Positive pilot signal; evidence is still too small for an official overall claim.</p>
-          </div>
-        </div>
-
-        <div class="gate-result">
-          <div>
-            <p class="eyebrow">Promotion gate outcome</p>
-            <h3>Current B3 Skill candidate: not promoted.</h3>
-            <p>
-              In the comparable seed-0 evaluation over 5 tasks × 5 episodes, frozen B0 reached 2/25
-              (8%) while B3 v1 and v2 reached 1/25 (4%). The correct system action is retention or rollback,
-              followed by better grounding and a larger paired evaluation.
-            </p>
-          </div>
-          <div class="gate-numbers" aria-label="Formal paired comparison">
-            <div><span>B0 champion</span><strong>8%</strong><small>2 / 25 · score 13.8</small></div>
-            <div class="gate-divider" aria-hidden="true">→</div>
-            <div class="rejected"><span>B3 candidate</span><strong>4%</strong><small>1 / 25 · score 9.8</small></div>
-          </div>
+          <table class="result-table">
+            <thead><tr><th>Method</th><th>SR</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td>Base π0.5</td><td>20.00</td><td>30.31</td></tr>
+              <tr><td>Hi_MEM</td><td>16.25</td><td>24.94</td></tr>
+              <tr class="positive-row"><td>Hi_MEM_EVO</td><td>23.75</td><td>35.69</td></tr>
+            </tbody>
+          </table>
+          <p class="result-caveat">Positive pilot signal; evidence is still too small for an official overall claim.</p>
         </div>
       </section>
 
@@ -376,19 +322,11 @@
           </article>
         </div>
 
-        <div class="evidence-strip">
+        <div class="evidence-strip evidence-strip-single">
           <figure>
             <img src="assets/images/stack-bowls-three-cameras.jpg" alt="Head, left wrist, and right wrist views from one stack bowls success" />
             <figcaption>One successful stack_bowls episode preserved across head, left wrist, and right wrist cameras.</figcaption>
           </figure>
-          <div>
-            <p class="eyebrow">Evidence boundary</p>
-            <h3>No matching failure is substituted.</h3>
-            <p>
-              The current RoboSkill result tree contains a stack_bowls success but no failure video for that task.
-              The gallery keeps this gap visible rather than borrowing a failure from another task.
-            </p>
-          </div>
         </div>
       </section>
 

@@ -823,6 +823,11 @@ video {
   min-height: 360px;
 }
 
+.memory-pilot-result {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
 .horizontal-chart {
   display: grid;
   gap: 22px;
@@ -1014,6 +1019,10 @@ video {
 
 .evidence-strip figure {
   margin: 0;
+}
+
+.evidence-strip-single {
+  grid-template-columns: 1fr;
 }
 
 .evidence-strip img {
